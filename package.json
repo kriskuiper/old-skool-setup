@@ -1,0 +1,37 @@
+{
+  "name": "old-skool-setup",
+  "version": "1.0.0",
+  "main": "server/index.js",
+  "repository": "git@github.com:kriskuiper/old-skool-setup.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server/build",
+    "dev": "run-p dev:*",
+    "dev:client": "run-p watch:*",
+    "dev:server": "nodemon",
+    "prebuild": "yarn clean",
+    "build": "run-s build:*",
+    "build:server": "esbuild './server/index.js' --bundle --platform=node --external:./node_modules/* --outfile='./server/build/index.js'",
+    "build:css": "tailwindcss -i ./client/assets/css/styles.css -o ./client/build/static/css/index.css",
+    "build:js": "esbuild './client/assets/js/index.js' --bundle --minify --outfile='./client/build/static/js/index.js'",
+    "build:static": "copyfiles ./client/static/* ./client/build/public -f",
+    "watch:css": "chokidar \"client/assets/css/*\" -c \"yarn build:css\"",
+    "watch:js": "esbuild './client/assets/js/index.js' --bundle --outfile='./client/build/static/js/index.js' --watch",
+    "watch:static": "chokidar \"client/static/*\" -c \"yarn build:static\"",
+    "clean": "rimraf ./client/build"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "nunjucks": "^3.2.3"
+  },
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "copyfiles": "^2.4.1",
+    "esbuild": "^0.14.26",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "tailwindcss": "^3.0.23"
+  }
+}
